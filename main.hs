@@ -25,6 +25,26 @@ biankerr = Auto "Biankerr" 500 20 "Tinch"
 gushtav = Auto "Gushtav" 200 130 "PetiLaLinda"
 rodra = Auto "Rodra" 0 50 "Taisa"
 
+-- Punto 2 
+
+esVocal :: Char -> Bool
+esVocal 'a' = True
+esVocal 'e' = True
+esVocal 'i' = True
+esVocal 'o' = True
+esVocal 'u' = True
+esVocal _ = False
+
+calcularAumentoVelocidad :: Int -> Float
+calcularAumentoVelocidad numero
+ | numero > 0 && numero < 3 = 15
+ | numero > 2 && numero < 5 = 20
+ | numero >= 5 = 30
+ | otherwise = 0
+
+incrementarVelocidad :: Auto -> Auto
+incrementarVelocidad unAuto = unAuto {velocidad = ((+ (calcularAumentoVelocidad.length.(filter esVocal).nombreDeSuEnamorade) unAuto).velocidad) unAuto}
+
 -- Punto 3
 quedaNafta :: Auto -> Bool
 quedaNafta unAuto = ((> 0).nafta) unAuto
@@ -39,7 +59,7 @@ puedeRealizarTruco unAuto = ((&& quedaNafta unAuto).tieneVelocidadBaja) unAuto
 comboLoco :: Auto -> Auto
 comboLoco unAuto = (nitro.deReversaRocha) unAuto
 
-explotarNafta :: Auto -> Auto
+explotarNafta :: Auto -> Float
 explotarNafta unAuto = ((*10).nafta) unAuto
 
 turbo :: Auto -> Auto
