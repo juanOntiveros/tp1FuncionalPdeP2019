@@ -25,3 +25,12 @@ biankerr = Auto "Biankerr" 500 20 "Tinch"
 gushtav = Auto "Gushtav" 200 130 "PetiLaLinda"
 rodra = Auto "Rodra" 0 50 "Taisa"
 
+-- Punto 3
+quedaNafta :: Auto -> Bool
+quedaNafta unAuto = ((> 0).nafta) unAuto
+
+tieneVelocidadBaja :: Auto -> Bool
+tieneVelocidadBaja unAuto = ((< 100).velocidad) unAuto
+
+puedeRealizarTruco :: Auto -> Bool
+puedeRealizarTruco unAuto = ((&& quedaNafta unAuto).tieneVelocidadBaja) unAuto
