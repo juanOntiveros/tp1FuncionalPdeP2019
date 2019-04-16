@@ -34,3 +34,13 @@ tieneVelocidadBaja unAuto = ((< 100).velocidad) unAuto
 
 puedeRealizarTruco :: Auto -> Bool
 puedeRealizarTruco unAuto = ((&& quedaNafta unAuto).tieneVelocidadBaja) unAuto
+
+-- Punto 4 "Falta queTrucazo"
+comboLoco :: Auto -> Auto
+comboLoco unAuto = (nitro.deReversaRocha) unAuto
+
+explotarNafta :: Auto -> Auto
+explotarNafta unAuto = ((*10).nafta) unAuto
+
+turbo :: Auto -> Auto
+turbo unAuto = unAuto {nafta = 0, velocidad = ((+ explotarNafta unAuto).velocidad) unAuto}
