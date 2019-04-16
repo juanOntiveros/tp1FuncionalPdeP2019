@@ -35,6 +35,9 @@ esVocal 'o' = True
 esVocal 'u' = True
 esVocal _ = False
 
+calcularVocales :: Auto -> Int
+calcularVocales unAuto = (length.(filter esVocal).nombreDeSuEnamorade) unAuto
+
 calcularAumentoVelocidad :: Int -> Float
 calcularAumentoVelocidad numero
  | numero > 0 && numero < 3 = 15
@@ -43,7 +46,7 @@ calcularAumentoVelocidad numero
  | otherwise = 0
 
 incrementarVelocidad :: Auto -> Auto
-incrementarVelocidad unAuto = unAuto {velocidad = ((+ (calcularAumentoVelocidad.length.(filter esVocal).nombreDeSuEnamorade) unAuto).velocidad) unAuto}
+incrementarVelocidad unAuto = unAuto {velocidad = ((+ (calcularAumentoVelocidad.calcularVocales) unAuto).velocidad) unAuto}
 
 -- Punto 3
 quedaNafta :: Auto -> Bool
@@ -55,9 +58,12 @@ tieneVelocidadBaja unAuto = ((< 100).velocidad) unAuto
 puedeRealizarTruco :: Auto -> Bool
 puedeRealizarTruco unAuto = ((&& quedaNafta unAuto).tieneVelocidadBaja) unAuto
 
--- Punto 4 "Falta queTrucazo"
+-- Punto 4
 comboLoco :: Auto -> Auto
 comboLoco unAuto = (nitro.deReversaRocha) unAuto
+
+queTrucazo :: Auto -> String -> Auto
+queTrucazo unAuto = incrementarVelocidad.(fingirAmor unAuto)
 
 explotarNafta :: Auto -> Float
 explotarNafta unAuto = ((*10).nafta) unAuto
