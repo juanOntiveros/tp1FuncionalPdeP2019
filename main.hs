@@ -3,9 +3,11 @@ data Auto = Auto {
     nombre :: String,
     nafta :: Float,
     velocidad :: Float,
-    nombreDeSuEnamorade :: String
-    -- Falta Modelar Trucos
+    nombreDeSuEnamorade :: String,
+    truco :: Truco
 } deriving Show
+
+type Truco = Auto
 
 deReversaRocha :: Auto -> Auto
 deReversaRocha unAuto = unAuto {nafta = ((+ 0.2 * 1000).nafta) unAuto}
@@ -20,10 +22,10 @@ fingirAmor :: Auto -> String -> Auto
 fingirAmor unAuto enamorade = unAuto {nombreDeSuEnamorade = enamorade}
 
 -- Personajes
-rochaMcQueen = Auto "RochaMcQueen" 300 0 "Ronco"
-biankerr = Auto "Biankerr" 500 20 "Tinch"
-gushtav = Auto "Gushtav" 200 130 "PetiLaLinda"
-rodra = Auto "Rodra" 0 50 "Taisa"
+rochaMcQueen = Auto "RochaMcQueen" 300 0 "Ronco" (deReversaRocha rochaMcQueen)
+biankerr = Auto "Biankerr" 500 20 "Tinch" (impresionar biankerr)
+gushtav = Auto "Gushtav" 200 130 "PetiLaLinda" (nitro gushtav)
+rodra = Auto "Rodra" 0 50 "Taisa" (fingirAmor rodra "Petra")
 
 -- Punto 2 
 esVocal :: Char -> Bool
@@ -64,3 +66,11 @@ explotarNafta unAuto = ((*10).nafta) unAuto
 
 turbo :: Auto -> Auto
 turbo unAuto = unAuto {nafta = 0, velocidad = ((+ explotarNafta unAuto).velocidad) unAuto}
+
+
+
+activarTruco :: Auto -> Auto
+activarTruco unAuto = truco unAuto
+
+cambiarTruco :: Auto -> Truco -> Auto
+cambiarTruco unAuto nuevoTruco = unAuto {truco = nuevoTruco}
