@@ -26,14 +26,8 @@ gushtav = Auto "Gushtav" 200 130 "PetiLaLinda"
 rodra = Auto "Rodra" 0 50 "Taisa"
 
 -- Punto 2 
-
 esVocal :: Char -> Bool
-esVocal 'a' = True
-esVocal 'e' = True
-esVocal 'i' = True
-esVocal 'o' = True
-esVocal 'u' = True
-esVocal _ = False
+esVocal letra = letra == 'a' || letra == 'e' || letra == 'i' || letra == 'o' || letra == 'u'
 
 calcularVocales :: Auto -> Int
 calcularVocales unAuto = (length.(filter esVocal).nombreDeSuEnamorade) unAuto
