@@ -1,11 +1,11 @@
 -------------------------------------------------3.1-----------------------------------------------------------------------------
 --Consultar la nafta de RochaMcQueen luego de realizar su truco
-(nivelDeNafta.deReversaRocha) rochaMcQueen
+(nivelDeNafta.realizarTruco) rochaMcQueen
 --Consultar la velocidad luego de realizar su truco
-(velocidad.impresionar) biankerr
-(velocidad.nitro) gushtav
+(velocidad.realizarTruco) biankerr
+(velocidad.realizarTruco) gushtav
 --Consultar la enamorada de Rodra cuando elige a Petra
-(suEnamorade.(queTrucazo rodra)) "Petra"
+(suEnamorade.realizarTruco) rodra
 
 ----------------------------------3.2 Consultar la velocidad luego de incrementar su velocidad------------------------------------
 (velocidad.incrementarVelocidad) rochaMcQueen
@@ -20,16 +20,16 @@ puedeRealizarTruco rodra
 
 ----------------------------------3.4 Consultar si pueden usar sus trucos--------------------------------------------------------
 --Consultar la nafta de Rocha luego de realizar comboLoco
-(nivelDeNafta.comboLoco) rochaMcQueen
+(nivelDeNafta.realizarTruco.(cambiarTruco rochaMcQueen)) comboLoco
 --Consultar la velocidad de Rocha luego de realizar comboLoco
-(velocidad.comboLoco) rochaMcQueen
+(velocidad.realizarTruco.(cambiarTruco rochaMcQueen)) comboLoco
 --Consultar la velocidad de Rodra luego de utilizar queTrucazo cambiando su enamorada a Murcielago
-(velocidad.(queTrucazo rodra)) "Murcielago"
+(velocidad.realizarTruco.(cambiarTruco rodra)) (queTrucazo "Murcielago")
 --Consultar la velocidad de Gushtav luego de utilizar turbo
-(velocidad.turbo) gushtav
+(velocidad.realizarTruco.(cambiarTruco gushtav)) turbo
 --Consultar la nafta de Gushtav luego de utilizar turbo
-(nivelDeNafta.turbo) gushtav
+(nivelDeNafta.realizarTruco.(cambiarTruco gushtav)) turbo
 --Consultar la velocidad de Rodra luego de utilizar turbo
-(velocidad.turbo) rodra
+(velocidad.realizarTruco.(cambiarTruco rodra)) turbo
 --Consultar la nafta de Rodra luego de utilizar turbo
-(nivelDeNafta.turbo) rodra
+(nivelDeNafta.realizarTruco.(cambiarTruco rodra)) turbo
