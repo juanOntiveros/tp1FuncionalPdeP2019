@@ -11,9 +11,6 @@ data Auto = Auto {
     truco :: Truco
 } deriving Show
 
-modificarVelocidad :: (Int->Int) -> Auto -> Auto
-modificarVelocidad modificacion unAuto  = unAuto {velocidad = (modificacion.velocidad) unAuto}
-
 --3.1.2Trucos-------------------------------------------------------------------------------------------------------------------
 deReversaRocha :: Auto -> Auto
 deReversaRocha unAuto = unAuto {nivelDeNafta = ((+ 200).nivelDeNafta) unAuto}
@@ -76,16 +73,21 @@ comboLoco unAuto = (nitro.deReversaRocha) unAuto
 queTrucazo :: String -> Auto -> Auto
 queTrucazo unAuto = incrementarVelocidad.(fingirAmor unAuto)
 
-explotarNafta :: Auto -> Int
-explotarNafta unAuto = ((*10).nivelDeNafta) unAuto
+explotarNafta :: Auto -> (Int -> Int)
+explotarNafta unAuto = (+ ((*10).nivelDeNafta) unAuto)
 
 turbo :: Auto -> Auto
-turbo unAuto = unAuto {nivelDeNafta = 0, velocidad = ((+ explotarNafta unAuto).velocidad) unAuto}
+turbo unAuto = (quitarTodaLaNafta.(modificarVelocidad (explotarNafta unAuto))) unAuto
 
---- Sujeto a revision.
-
+--Funciones agregadas------------------------------------------------------------------------------------------------------------
 realizarTruco :: Auto -> Auto
 realizarTruco unAuto = (truco unAuto) unAuto
 
 cambiarTruco :: Auto -> Truco -> Auto
 cambiarTruco unAuto nuevoTruco = unAuto {truco = nuevoTruco}
+
+modificarVelocidad :: (Int->Int) -> Auto -> Auto
+modificarVelocidad modificacion unAuto  = unAuto {velocidad = (modificacion.velocidad) unAuto}
+
+quitarTodaLaNafta :: Auto -> Auto
+quitarTodaLaNafta unAuto = unAuto {nivelDeNafta = 0}
