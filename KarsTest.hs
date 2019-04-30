@@ -81,6 +81,11 @@ main = hspec $ do
     describe "Pruebas de la punto 4" $ do
         it "1. Consultar el ganador de potreroFunes es Rodra" $ do
             (nombre.quienGana) potreroFunes `shouldBe` ("Rodra" :: String)
+
+    describe "Pruebas de la punto 5" $ do
+        it "1. Consultar la velocidad de rodra tras realizar elGranTruco con nitro, deReversa e impresionar es 130" $ do
+            (velocidad.(elGranTruco [nitro,deReversaRocha,impresionar])) rodra `shouldBe` (130 :: Float)
         
-        
+        it "2. Consultar la nafta de rodra tras realizar elGranTruco con nitro, deReversa e impresionar es 13" $ do
+            (nivelDeNafta.(elGranTruco [nitro,deReversaRocha,impresionar])) rodra `shouldBe` (13 :: Float)        
             

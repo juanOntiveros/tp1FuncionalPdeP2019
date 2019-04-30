@@ -192,3 +192,7 @@ darParticipanteConMayorVelocidad = foldl1 maximaVelocidad
 
 quienGana :: Carrera -> Auto
 quienGana unaCarrera = (darParticipanteConMayorVelocidad.participantes.correrCarrera) unaCarrera
+
+-- 3.5 El gran truco
+elGranTruco :: [Truco] -> Auto -> Auto
+elGranTruco trucos = (foldl (flip (.)) inutilidad trucos)
