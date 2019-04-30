@@ -1,5 +1,7 @@
 import Text.Show.Functions
 
+--Parte 1 del TP
+
 --3.1.1Modelado del Auto
 type Truco = Auto -> Auto
 
@@ -91,3 +93,19 @@ modificarVelocidad modificacion unAuto  = unAuto {velocidad = (modificacion.velo
 
 quitarTodaLaNafta :: Auto -> Auto
 quitarTodaLaNafta unAuto = unAuto {nivelDeNafta = 0}
+
+--Parte 2 del TP
+data Carrera = Carrera {
+    cantidadDeVueltas :: Int,
+    longitudPista :: Float,
+    publico :: [String],
+    trampa :: Trampa,
+    participantes :: [Auto]
+} deriving Show
+
+type Trampa = Carrera -> Carrera
+
+potreroFunes = Carrera 3 5.0 ["Ronco", "Tinch", "Dodain"] sacarAlPistero [rochaMcQueen, biankerr, gushtav, rodra]
+
+sacarAlPistero :: Carrera -> Carrera
+sacarAlPistero unaCarrera = unaCarrera {participantes = (tail.participantes) unaCarrera}
