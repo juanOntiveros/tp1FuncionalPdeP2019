@@ -58,3 +58,29 @@ main = hspec $ do
 
         it "8. La velocidad del ultimo despues de aplicar lluvia sobre potreroFunes es 40" $ do
             (velocidad.last.participantes.lluvia) potreroFunes `shouldBe` (40 :: Float)
+
+    describe "Pruebas de la punto 3" $ do
+        it "1. Consultar la nafta del primero luego de darVuelta es 490" $ do
+            (nivelDeNafta.head.participantes.darVuelta) potreroFunes `shouldBe` (490 :: Float)
+
+        it "2. Consultar la velocidad del primero luego de darVuelta es 40" $ do
+            (velocidad.head.participantes.darVuelta) potreroFunes `shouldBe` (40 :: Float)
+
+        it "3. Consultar la cantidad de participantes luego de dar dos vueltas es 2" $ do
+            (length.participantes.darVuelta.darVuelta) potreroFunes `shouldBe` (2 :: Int)
+
+        it "4. Consultar la nafta del primero luego de dar dos vueltas es 70" $ do
+            (nivelDeNafta.head.participantes.darVuelta.darVuelta) potreroFunes `shouldBe` (70 :: Float)
+            
+        it "5. Consultar la cantidad de participantes luego de correr la carrera es 1" $ do
+            (length.participantes.correrCarrera) potreroFunes `shouldBe` (1 :: Int)
+        
+        it "6. Consultar el primero luego de correr la carrera es Rodra" $ do
+            (nombre.head.participantes.correrCarrera) potreroFunes `shouldBe` ("Rodra" :: String)
+
+    describe "Pruebas de la punto 4" $ do
+        it "1. Consultar el ganador de potreroFunes es Rodra" $ do
+            (nombre.quienGana) potreroFunes `shouldBe` ("Rodra" :: String)
+        
+        
+            

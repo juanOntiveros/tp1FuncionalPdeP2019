@@ -178,3 +178,17 @@ correrCarrera unaCarrera = darMultiplesVueltas (cantidadDeVueltas unaCarrera) un
 darMultiplesVueltas :: Int -> Carrera -> Carrera
 darMultiplesVueltas 0 unaCarrera = unaCarrera
 darMultiplesVueltas cantidadDeVueltas unaCarrera = darMultiplesVueltas (cantidadDeVueltas - 1) (darVuelta unaCarrera)
+
+-- 3.4 Punto
+
+maximaVelocidad :: Auto -> Auto -> Auto
+maximaVelocidad primerAuto segundoAuto 
+    | velocidad primerAuto >= velocidad segundoAuto = primerAuto
+    | otherwise = segundoAuto
+
+-- Hay que revisar
+darParticipanteConMayorVelocidad :: [Auto] -> Auto
+darParticipanteConMayorVelocidad = foldl1 maximaVelocidad
+
+quienGana :: Carrera -> Auto
+quienGana unaCarrera = (darParticipanteConMayorVelocidad.participantes.correrCarrera) unaCarrera
