@@ -46,3 +46,15 @@ main = hspec $ do
 
         it "4. rochaMcQueen ya no participa en potreroFunes tras sacarAlPistero" $ do
             elem (nombre rochaMcQueen) (((map nombre).participantes.sacarAlPistero) potreroFunes) `shouldBe` (False :: Bool)
+
+        it "5. La cantidad de participantes despues de aplicar pocaReserva en potreroFunes es 3" $ do
+            (length.participantes.pocaReserva) potreroFunes `shouldBe` (3 :: Int)
+
+        it "6. rodra ya no participa en potreroFunes tras pocaReserva" $ do
+            elem (nombre rodra) (((map nombre).participantes.pocaReserva) potreroFunes) `shouldBe` (False :: Bool)
+
+        it "7. La cantidad de participantes despues de aplicar podio en potreroFunes es 3" $ do
+            (length.participantes.podio) potreroFunes `shouldBe` (3 :: Int)
+
+        it "8. La velocidad del ultimo despues de aplicar lluvia sobre potreroFunes es 40" $ do
+            (velocidad.last.participantes.lluvia) potreroFunes `shouldBe` (40 :: Float)

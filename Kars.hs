@@ -64,8 +64,14 @@ incrementarVelocidad unAuto = modificarVelocidad (sumarPotencia unAuto) unAuto
 quedaNafta :: Auto -> Bool
 quedaNafta unAuto = ((> 0).nivelDeNafta) unAuto
 
+cumpleLaVelocidadLaCondicion :: (Float -> Bool) -> Auto -> Bool
+cumpleLaVelocidadLaCondicion condicion unAuto = (condicion.velocidad) unAuto
+
+cumpleElNivelDeNaftaLaCondicion :: (Float -> Bool) -> Auto -> Bool
+cumpleElNivelDeNaftaLaCondicion condicion unAuto = (condicion.nivelDeNafta) unAuto
+
 tieneVelocidadBaja :: Auto -> Bool
-tieneVelocidadBaja unAuto = ((< 100).velocidad) unAuto
+tieneVelocidadBaja = cumpleLaVelocidadLaCondicion (< 100)
 
 puedeRealizarTruco :: Auto -> Bool
 puedeRealizarTruco unAuto = ((&& quedaNafta unAuto).tieneVelocidadBaja) unAuto
@@ -87,11 +93,14 @@ turbo unAuto = (quitarTodaLaNafta.(modificarVelocidad (explotarNafta unAuto))) u
 realizarTruco :: Auto -> Auto
 realizarTruco unAuto = (truco unAuto) unAuto
 
-cambiarTruco :: Auto -> Truco -> Auto
-cambiarTruco unAuto nuevoTruco = unAuto {truco = nuevoTruco}
+cambiarTruco :: Truco -> Auto -> Auto
+cambiarTruco nuevoTruco unAuto = unAuto {truco = nuevoTruco}
 
 modificarVelocidad :: (Float -> Float) -> Auto -> Auto
 modificarVelocidad modificacion unAuto  = unAuto {velocidad = (modificacion.velocidad) unAuto}
+
+modificarNafta :: (Float -> Float) -> Auto -> Auto
+modificarNafta modificacion unAuto = unAuto {nivelDeNafta = (modificacion.nivelDeNafta) unAuto}
 
 quitarTodaLaNafta :: Auto -> Auto
 quitarTodaLaNafta unAuto = unAuto {nivelDeNafta = 0}
@@ -112,5 +121,60 @@ type Trampa = Carrera -> Carrera
 potreroFunes = Carrera 3 5.0 ["Ronco", "Tinch", "Dodain"] sacarAlPistero [rochaMcQueen, biankerr, gushtav, rodra]
 
 --3.2 Trampas
+aplicarALosParticipantes aplicable unaCarrera = unaCarrera {participantes = (aplicable.participantes) unaCarrera}
+
 sacarAlPistero :: Carrera -> Carrera
-sacarAlPistero unaCarrera = unaCarrera {participantes = (tail.participantes) unaCarrera}
+sacarAlPistero = aplicarALosParticipantes tail
+
+lluvia :: Carrera -> Carrera
+lluvia = aplicarALosParticipantes (map (modificarVelocidad (+(-10))))
+
+inutilidad :: Auto -> Auto
+inutilidad unAuto = unAuto
+
+neutralizarTrucos :: Carrera -> Carrera
+neutralizarTrucos = aplicarALosParticipantes (map (cambiarTruco inutilidad))
+
+pocaReserva :: Carrera -> Carrera
+pocaReserva = aplicarALosParticipantes (filter (cumpleElNivelDeNaftaLaCondicion (> 30)))
+
+podio :: Carrera -> Carrera
+podio = aplicarALosParticipantes init
+
+--3.3 Vueltas
+
+calcularNaftaAQuitar :: Float -> Auto -> Float
+calcularNaftaAQuitar longitud = ((longitud/10)*).velocidad
+
+modificarNaftaSegunPista :: Float -> Auto -> Auto
+modificarNaftaSegunPista longitud unAuto = modificarNafta (+(- calcularNaftaAQuitar longitud unAuto)) unAuto
+
+restarNafta :: Carrera -> Carrera
+restarNafta unaCarrera = aplicarALosParticipantes (map (modificarNaftaSegunPista (longitudPista unaCarrera))) unaCarrera
+
+aplicarTrucoRevisandoEnamorados :: [String] -> Auto -> Auto
+aplicarTrucoRevisandoEnamorados enamorados unAuto 
+    | elem (suEnamorade unAuto) enamorados = realizarTruco unAuto
+    | otherwise = unAuto
+
+realizarTrucoDeLosParticipantes :: Carrera -> Carrera
+realizarTrucoDeLosParticipantes unaCarrera = aplicarALosParticipantes (map (aplicarTrucoRevisandoEnamorados (publico unaCarrera))) unaCarrera
+
+aplicarTrampa :: Carrera -> Carrera
+aplicarTrampa unaCarrera = (trampa unaCarrera) unaCarrera
+
+cambiarTrampa :: Trampa -> Carrera -> Carrera
+cambiarTrampa nuevoTrampa unaCarrera = unaCarrera {trampa = nuevoTrampa}
+
+restarVuelta :: Carrera -> Carrera
+restarVuelta unaCarrera = unaCarrera {cantidadDeVueltas = cantidadDeVueltas unaCarrera - 1} 
+
+darVuelta :: Carrera -> Carrera
+darVuelta = restarVuelta.aplicarTrampa.realizarTrucoDeLosParticipantes.restarNafta
+
+correrCarrera :: Carrera -> Carrera
+correrCarrera unaCarrera = darMultiplesVueltas (cantidadDeVueltas unaCarrera) unaCarrera
+
+darMultiplesVueltas :: Int -> Carrera -> Carrera
+darMultiplesVueltas 0 unaCarrera = unaCarrera
+darMultiplesVueltas cantidadDeVueltas unaCarrera = darMultiplesVueltas (cantidadDeVueltas - 1) (darVuelta unaCarrera)
