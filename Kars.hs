@@ -173,11 +173,18 @@ darVuelta :: Carrera -> Carrera
 darVuelta = restarVuelta.aplicarTrampa.realizarTrucoDeLosParticipantes.restarNafta
 
 correrCarrera :: Carrera -> Carrera
+correrCarrera unaCarrera = ((iterate (darVuelta)) $ unaCarrera) !! (cantidadDeVueltas unaCarrera)
+
+{- Para mostrar en recursivo.
+
+correrCarrera2 :: Carrera -> Carrera
 correrCarrera unaCarrera = darMultiplesVueltas (cantidadDeVueltas unaCarrera) unaCarrera
 
 darMultiplesVueltas :: Int -> Carrera -> Carrera
 darMultiplesVueltas 0 unaCarrera = unaCarrera
 darMultiplesVueltas cantidadDeVueltas unaCarrera = darMultiplesVueltas (cantidadDeVueltas - 1) (darVuelta unaCarrera)
+
+-}
 
 -- 3.4 Punto
 
