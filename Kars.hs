@@ -121,6 +121,7 @@ type Trampa = Carrera -> Carrera
 potreroFunes = Carrera 3 5.0 ["Ronco", "Tinch", "Dodain"] sacarAlPistero [rochaMcQueen, biankerr, gushtav, rodra]
 
 --3.2 Trampas
+aplicarALosParticipantes :: ([Auto]->[Auto]) -> Carrera -> Carrera
 aplicarALosParticipantes aplicable unaCarrera = unaCarrera {participantes = (aplicable.participantes) unaCarrera}
 
 sacarAlPistero :: Carrera -> Carrera
@@ -173,7 +174,7 @@ darVuelta :: Carrera -> Carrera
 darVuelta = restarVuelta.aplicarTrampa.realizarTrucoDeLosParticipantes.restarNafta
 
 correrCarrera :: Carrera -> Carrera
-correrCarrera unaCarrera = ((iterate (darVuelta)) $ unaCarrera) !! (cantidadDeVueltas unaCarrera)
+correrCarrera unaCarrera = (iterate (darVuelta) unaCarrera) !! cantidadDeVueltas unaCarrera
 
 {- Para mostrar en recursivo.
 
