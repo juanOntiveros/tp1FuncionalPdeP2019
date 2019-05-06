@@ -17,7 +17,7 @@ data Auto = Auto {
 
 --3.1.2Trucos-------------------------------------------------------------------------------------------------------------------
 deReversaRocha :: Auto -> Auto
-deReversaRocha unAuto = unAuto {nivelDeNafta = ((+ (velocidad unAuto/5)).nivelDeNafta) unAuto}
+deReversaRocha unAuto = unAuto {nivelDeNafta = ((+ (velocidad unAuto/5)).nivelDeNafta) unAuto} -- delegar
 
 impresionar :: Auto -> Auto
 impresionar = modificarVelocidad (*2)
@@ -128,10 +128,10 @@ sacarAlPistero :: Carrera -> Carrera
 sacarAlPistero = aplicarALosParticipantes tail
 
 lluvia :: Carrera -> Carrera
-lluvia = aplicarALosParticipantes (map (modificarVelocidad (+(-10))))
+lluvia = aplicarALosParticipantes (map (modificarVelocidad (-(10.0)))) -- delegar
 
 inutilidad :: Auto -> Auto
-inutilidad unAuto = unAuto
+inutilidad = id
 
 neutralizarTrucos :: Carrera -> Carrera
 neutralizarTrucos = aplicarALosParticipantes (map (cambiarTruco inutilidad))
@@ -140,7 +140,10 @@ pocaReserva :: Carrera -> Carrera
 pocaReserva = aplicarALosParticipantes (filter (cumpleElNivelDeNaftaLaCondicion (> 30)))
 
 podio :: Carrera -> Carrera
-podio = aplicarALosParticipantes init
+podio = aplicarALosParticipantes sacarALosPrimerosTres
+
+sacarALosPrimerosTres :: [Auto] -> [Auto]
+sacarALosPrimerosTres = take 3
 
 --3.3 Vueltas
 
@@ -148,10 +151,10 @@ calcularNaftaAQuitar :: Float -> Auto -> Float
 calcularNaftaAQuitar longitud = ((longitud/10)*).velocidad
 
 modificarNaftaSegunPista :: Float -> Auto -> Auto
-modificarNaftaSegunPista longitud unAuto = modificarNafta (+(- calcularNaftaAQuitar longitud unAuto)) unAuto
+modificarNaftaSegunPista longitud unAuto = modificarNafta (+(- calcularNaftaAQuitar longitud unAuto)) unAuto -- fijarse los floats
 
 restarNafta :: Carrera -> Carrera
-restarNafta unaCarrera = aplicarALosParticipantes (map (modificarNaftaSegunPista (longitudPista unaCarrera))) unaCarrera
+restarNafta unaCarrera = aplicarALosParticipantes (map (modificarNaftaSegunPista (longitudPista unaCarrera))) unaCarrera -- delegar
 
 aplicarTrucoRevisandoEnamorados :: [String] -> Auto -> Auto
 aplicarTrucoRevisandoEnamorados enamorados unAuto 
@@ -159,7 +162,7 @@ aplicarTrucoRevisandoEnamorados enamorados unAuto
     | otherwise = unAuto
 
 realizarTrucoDeLosParticipantes :: Carrera -> Carrera
-realizarTrucoDeLosParticipantes unaCarrera = aplicarALosParticipantes (map (aplicarTrucoRevisandoEnamorados (publico unaCarrera))) unaCarrera
+realizarTrucoDeLosParticipantes unaCarrera = aplicarALosParticipantes (map (aplicarTrucoRevisandoEnamorados (publico unaCarrera))) unaCarrera -- delegar
 
 aplicarTrampa :: Carrera -> Carrera
 aplicarTrampa unaCarrera = (trampa unaCarrera) unaCarrera
@@ -203,4 +206,7 @@ quienGana unaCarrera = (darParticipanteConMayorVelocidad.participantes.correrCar
 
 -- 3.5 El gran truco
 elGranTruco :: [Truco] -> Auto -> Auto
-elGranTruco trucos = (foldl (flip (.)) inutilidad trucos)
+elGranTruco trucos = foldl1 (flip (.)) trucos
+
+elGranTruco2 :: [Truco] -> Auto -> Auto
+elGranTruco trucos unAuto = (foldl (flip ($)) unAuto) trucos
