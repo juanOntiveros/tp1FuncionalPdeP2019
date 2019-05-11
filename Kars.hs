@@ -16,8 +16,11 @@ data Auto = Auto {
 } deriving (Show)
 
 --3.1.2Trucos-------------------------------------------------------------------------------------------------------------------
+dividirLaVelocidadEn :: Int -> Auto -> Float
+dividirLaVelocidadEn numero unAuto = velocidad unAuto / 5
+
 deReversaRocha :: Auto -> Auto
-deReversaRocha unAuto = unAuto {nivelDeNafta = ((+ (velocidad unAuto/5)).nivelDeNafta) unAuto} -- delegar
+deReversaRocha unAuto = modificarNafta (+ dividirLaVelocidadEn 5 unAuto) unAuto
 
 impresionar :: Auto -> Auto
 impresionar = modificarVelocidad (*2)
@@ -124,17 +127,20 @@ potreroFunes = Carrera 3 5.0 ["Ronco", "Tinch", "Dodain"] sacarAlPistero [rochaM
 aplicarALosParticipantes :: ([Auto]->[Auto]) -> Carrera -> Carrera
 aplicarALosParticipantes aplicable unaCarrera = unaCarrera {participantes = (aplicable.participantes) unaCarrera}
 
+aplicarMapParticipantes :: (Auto -> Auto) -> Carrera -> Carrera
+aplicarMapParticipantes aplicable unaCarrera = aplicarALosParticipantes (map aplicable) unaCarrera
+
 sacarAlPistero :: Carrera -> Carrera
 sacarAlPistero = aplicarALosParticipantes tail
 
 lluvia :: Carrera -> Carrera
-lluvia = aplicarALosParticipantes (map (modificarVelocidad (-(10.0)))) -- delegar
+lluvia = aplicarMapParticipantes (modificarVelocidad (+(-10.0)))
 
 inutilidad :: Auto -> Auto
 inutilidad = id
 
 neutralizarTrucos :: Carrera -> Carrera
-neutralizarTrucos = aplicarALosParticipantes (map (cambiarTruco inutilidad))
+neutralizarTrucos = aplicarMapParticipantes (cambiarTruco inutilidad)
 
 pocaReserva :: Carrera -> Carrera
 pocaReserva = aplicarALosParticipantes (filter (cumpleElNivelDeNaftaLaCondicion (> 30)))
@@ -154,15 +160,15 @@ modificarNaftaSegunPista :: Float -> Auto -> Auto
 modificarNaftaSegunPista longitud unAuto = modificarNafta (+(- calcularNaftaAQuitar longitud unAuto)) unAuto -- fijarse los floats
 
 restarNafta :: Carrera -> Carrera
-restarNafta unaCarrera = aplicarALosParticipantes (map (modificarNaftaSegunPista (longitudPista unaCarrera))) unaCarrera -- delegar
+restarNafta unaCarrera = aplicarMapParticipantes (modificarNaftaSegunPista (longitudPista unaCarrera)) unaCarrera
 
-aplicarTrucoRevisandoEnamorados :: [String] -> Auto -> Auto
-aplicarTrucoRevisandoEnamorados enamorados unAuto 
-    | elem (suEnamorade unAuto) enamorados = realizarTruco unAuto
+aplicarTrucoRevisandoEnamorados :: Carrera -> Auto -> Auto
+aplicarTrucoRevisandoEnamorados unaCarrera unAuto 
+    | elem (suEnamorade unAuto) (publico unaCarrera) = realizarTruco unAuto
     | otherwise = unAuto
 
 realizarTrucoDeLosParticipantes :: Carrera -> Carrera
-realizarTrucoDeLosParticipantes unaCarrera = aplicarALosParticipantes (map (aplicarTrucoRevisandoEnamorados (publico unaCarrera))) unaCarrera -- delegar
+realizarTrucoDeLosParticipantes unaCarrera = aplicarMapParticipantes (aplicarTrucoRevisandoEnamorados unaCarrera) unaCarrera
 
 aplicarTrampa :: Carrera -> Carrera
 aplicarTrampa unaCarrera = (trampa unaCarrera) unaCarrera
@@ -209,4 +215,4 @@ elGranTruco :: [Truco] -> Auto -> Auto
 elGranTruco trucos = foldl1 (flip (.)) trucos
 
 elGranTruco2 :: [Truco] -> Auto -> Auto
-elGranTruco trucos unAuto = (foldl (flip ($)) unAuto) trucos
+elGranTruco2 trucos unAuto = (foldl (flip ($)) unAuto) trucos
